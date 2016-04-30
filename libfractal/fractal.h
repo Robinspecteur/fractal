@@ -1,9 +1,16 @@
 #ifndef _FRACTAL_H
 #define _FRACTAL_H
 
+typedef struct fractal fractal;
 struct fractal {
-    /* TODO: à remplir */
+	char* fract;
+	int width;
+	int height;
+	double a;
+	double b;
+	int** pixel;
 };
+
 
 /*
  * fractal_new: alloue une nouvelle structure fractal
@@ -53,7 +60,7 @@ int fractal_get_width(const struct fractal *f);
 
 /*
  * fractal_get_height: retourne la hauteur de l'image de la fractale
- * 
+ *
  * @f: fractale
  * @return: hauteur
  */
@@ -61,7 +68,7 @@ int fractal_get_height(const struct fractal *f);
 
 /*
  * fractal_get_a: retourne la partie réelle des coordonnées de la fractale
- * 
+ *
  * @f: fractale
  * @return: partie réelle
  */
