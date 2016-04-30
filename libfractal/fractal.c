@@ -10,14 +10,14 @@ struct fractal *fractal_new(int width, int height, double a, double b)
       newFract->height = height;
       newFract->a = a;
       newFract->b = b;
-      /*
-      Problème pour gérer le nom du fractal
-      Problème pour gérer le tableau pixel
+      newFract->pixel = malloc(a *sizeof(*pixel));//Un bug peut peut-être venir de la
+      int i;
+      for(i=0; i < a; i++)
+      {
+        newFract->pixel[i]= malloc(b*sizeof(*(pixel[i])));
+      }
 
-      */
       return newFract;
-
-
     }
      else
      {
@@ -29,7 +29,8 @@ void fractal_free(struct fractal *f)
 {
     if (f)
     {
-      free(f)
+      free(f); //Peut être changer le free si il y a une couille dans notre libèrations
+      //de mêmoire https://openclassrooms.com/courses/tableaux-pointeurs-et-allocation-dynamique
     }
 }
 
@@ -41,29 +42,27 @@ int fractal_get_value(const struct fractal *f, int x, int y)
 
 void fractal_set_value(struct fractal *f, int x, int y, int val)
 {
-    /* TODO */
+    int *width;
+    int *height;
+    &width = &(f->
 }
 
 int fractal_get_width(const struct fractal *f)
 {
-    /* TODO */
-    return 0;
+    return f->width;
 }
 
 int fractal_get_height(const struct fractal *f)
 {
-    /* TODO */
-    return 0;
+    return f->height;
 }
 
 double fractal_get_a(const struct fractal *f)
 {
-    /* TODO */
-    return 0;
+    return f->a;
 }
 
 double fractal_get_b(const struct fractal *f)
 {
-    /* TODO */
-    return 0;
+    return f->b;
 }
