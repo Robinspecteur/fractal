@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "fractal.h"
+#include "libfractal/fractal.h"
 
 int main()
 {
-    /* TODO */
+    printf("Robin tu es genial\n");
 
     return 0;
 }
