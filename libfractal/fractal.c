@@ -6,15 +6,16 @@ struct fractal *fractal_new(int width, int height, double a, double b)
     fractal *newFract = (fractal*)malloc(sizeof(fractal));
     if(newFract)
     {
+			int **ptr;
       newFract->width = width;
       newFract->height = height;
       newFract->a = a;
       newFract->b = b;
-      newFract->pixel = malloc(a *sizeof(*pixel));//Un bug peut peut-être venir de la
+      newFract->pixel = malloc(a *sizeof(*ptr));//Un bug peut peut-être venir de la
       int i;
       for(i=0; i < a; i++)
       {
-        newFract->pixel[i]= malloc(b*sizeof(*(pixel[i])));
+        newFract->pixel[i]= malloc(b*sizeof(*(ptr[i])));
       }
 
       return newFract;
