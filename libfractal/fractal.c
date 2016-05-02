@@ -90,7 +90,8 @@ void fractal_set_value(struct fractal *f, int x, int y, int val)
 
 int fractal_get_width(const struct fractal *f)
 {
-    return f->width;
+    int x = f->width;
+    return x;
 }
 
 int fractal_get_height(const struct fractal *f)
@@ -106,9 +107,4 @@ double fractal_get_a(const struct fractal *f)
 double fractal_get_b(const struct fractal *f)
 {
     return f->b;
-}
-
-int main()
-{
-  return(EXIT_SUCCESS);
 }

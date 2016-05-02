@@ -34,9 +34,10 @@ int write_bitmap_sdl(const struct fractal *f, const char *fname)
     h = fractal_get_height(f);
 
     back = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMASK, GMASK, BMASK, AMASK);
-    if (!back)
+    if (!back){
+     printf("%s\n","Erreur dans SDL_CreateRGBSurface" );
         return -1;
-
+      }
     for (i = 0; i < w; i++) {
         for (j = 0; j < h; j++) {
             col = itoc(fractal_get_value(f, i, j));
@@ -52,8 +53,10 @@ int write_bitmap_sdl(const struct fractal *f, const char *fname)
         }
     }
 
-    if (SDL_SaveBMP(back, fname) < 0)
+    if (SDL_SaveBMP(back, fname) < 0){
+        printf("%s\n","Erreur dans SDL_SaveBMP" );
         return -1;
+      }
 
     SDL_FreeSurface(back);
 
