@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "fractal.h"
 
 struct fractal *fractal_new(int width, int height, double a, double b)
@@ -11,13 +12,13 @@ struct fractal *fractal_new(int width, int height, double a, double b)
       newFract->height = height;
       newFract->a = a;
       newFract->b = b;
-      newFract->pixel = malloc(a *sizeof(*ptr));//Un bug peut peut-être venir de la
+      int **tab = malloc(a *sizeof(*ptr));//Un bug peut peut-être venir de la
       int i;
       for(i=0; i < a; i++)
       {
         newFract->pixel[i]= malloc(b*sizeof(*(ptr[i])));
       }
-
+      newFract->pixel = tab;
       return newFract;
     }
      else
@@ -37,15 +38,54 @@ void fractal_free(struct fractal *f)
 
 int fractal_get_value(const struct fractal *f, int x, int y)
 {
-    /* TODO */
-    return 0;
+
+  int width = fractal_get_width(f);
+  int height = fractal_get_height(f);
+  if (x > width)
+  {
+    printf("%s\n","x too big");
+  }
+
+  else if (y > height)
+  {
+    printf("%s\n","y too big");
+  }
+
+  else
+  {
+    int **tab = f->pixel;
+    if (tab[x][y] == 0)
+    {
+      return EXIT_FAILURE;
+    }
+    else
+    {
+      return tab[x][y];
+    }
+  }
+  return EXIT_FAILURE;
 }
 
 void fractal_set_value(struct fractal *f, int x, int y, int val)
 {
-    int *width;
-    int *height;
-    &width = &(f->
+    int width = fractal_get_width(f);
+    int height = fractal_get_height(f);
+
+    if (x > width)
+    {
+      printf("%s\n","x too big");
+    }
+
+    else if (y > height)
+    {
+      printf("%s\n","y too big");
+    }
+
+    else
+    {
+      int **tab = f->pixel;
+      tab[x][y]=val;
+    }
 }
 
 int fractal_get_width(const struct fractal *f)
@@ -66,4 +106,9 @@ double fractal_get_a(const struct fractal *f)
 double fractal_get_b(const struct fractal *f)
 {
     return f->b;
+}
+
+int main()
+{
+  return(EXIT_SUCCESS);
 }
