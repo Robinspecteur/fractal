@@ -27,7 +27,8 @@ struct fractal** file_to_fract(FILE *input) {
   printf("Test 1\n");
   fractal** fract_array = (fractal**) malloc(sizeof(**fract_array));
   printf("Test 2\n");
-  fprintf("buf : ")
+  fgets(buf, sizeof(buf), input);
+  printf("buf : %s", buf);
   //for (size_t i = 0; fgets(buf, sizeof(buf), input); i++) {
     fract_array[0]=write_fract(buf);
     printf("Test 3\n");
@@ -73,8 +74,9 @@ void compute(struct fractal *f)
 
 int main(int argv, char *argc[])
 {
-  //FILE *input = fopen(argc[1], "r");
-  //struct fractal *fract_test = file_to_fract(input)[0];
+  FILE *input = fopen(argc[1], "r");
+  struct fractal *fract_test = file_to_fract(input)[0];
+  read_fract(fract_test);
   /*
 
   struct fract** fract_table = file_to_fract(input);
