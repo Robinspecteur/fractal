@@ -26,26 +26,29 @@
 
 int write_bitmap_sdl(const struct fractal *f, const char *fname)
 {
+
     SDL_Surface *back;
     SDL_Rect pix;
     int w, h, i, j, col;
     uint32_t pcol, rcol, gcol, bcol;
     w = fractal_get_width(f);
     h = fractal_get_height(f);
-
+    printf("test write1");
     back = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMASK, GMASK, BMASK, AMASK);
-    if (!back){
-     printf("%s\n","Erreur dans SDL_CreateRGBSurface" );
+      printf("test write2");
+    if (!back)
+    {
         return -1;
       }
-    for (i = 0; i < w; i++) {
-        for (j = 0; j < h; j++) {
+    for (i = 0; i < w; i++)
+    {
+        for (j = 0; j < h; j++)
+         {
             col = itoc(fractal_get_value(f, i, j));
             rcol = col & 0xff;
             gcol = (col >> 8) & 0xff;
             bcol = (col >> 16) & 0xff;
             pcol = SDL_MapRGB(back->format, rcol, gcol, bcol);
-
             pix.w = pix.h = 1;
             pix.x = i;
             pix.y = j;
@@ -53,8 +56,8 @@ int write_bitmap_sdl(const struct fractal *f, const char *fname)
         }
     }
 
-    if (SDL_SaveBMP(back, fname) < 0){
-        printf("%s\n","Erreur dans SDL_SaveBMP" );
+    if (SDL_SaveBMP(back, fname) < 0)
+    {
         return -1;
       }
 
@@ -89,7 +92,6 @@ int fractal_compute_value(struct fractal *f, int x, int y)
     double a, b;
     int val;
     int w, h;
-
     a = fractal_get_a(f);
     b = fractal_get_b(f);
 
@@ -101,6 +103,5 @@ int fractal_compute_value(struct fractal *f, int x, int y)
 
     val = iter_julia(zx, zy, a, b, 0);
     fractal_set_value(f, x, y, val);
-
     return val;
 }

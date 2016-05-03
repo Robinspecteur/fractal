@@ -1,0 +1,27 @@
+EXEC=main
+LIBFRACTAL_DIR = libfractal
+
+all : $(EXEC)
+
+lib :
+	cd libfractal && $(MAKE)
+
+$(EXEC) : main.o consumerproducerfile.o libfractal/libfractal.a
+	gcc -o main main.o consumerproducerfile.o libfractal/libfractal.a -lpthread -lSDL2 
+
+main.o : main.c main.h
+	gcc -c main.c
+
+consumerproducerfile.o : consumerproducerfile.c
+	gcc -c consumerproducerfile.c
+
+test: testCUnit/test.c
+	gcc -o test testCUnit/test.c -lcunit -L$(HOME)/local/lib -I$(HOME)/local/include
+	./test
+	
+clean :
+	rm -rf *.o
+	rm -rf libfractal/*.o
+	rm -rf test
+	rm -rf $(EXEC)
+	rm -rf *.bmp

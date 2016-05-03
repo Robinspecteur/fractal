@@ -12,13 +12,12 @@ struct fractal *fractal_new(int width, int height, double a, double b)
       newFract->height = height;
       newFract->a = a;
       newFract->b = b;
-      int **tab = malloc(a *sizeof(*ptr));//Un bug peut peut-être venir de la
+      newFract->pixel = (int**)malloc(height *sizeof(*ptr));//Un bug peut peut-être venir de la
       int i;
-      for(i=0; i < a; i++)
+      for(i=0; i < height ; i++)
       {
-        newFract->pixel[i]= malloc(b*sizeof(*(ptr[i])));
+        (newFract->pixel)[i]= (int*)malloc(width*sizeof(**ptr));
       }
-      newFract->pixel = tab;
       return newFract;
     }
      else
@@ -29,14 +28,19 @@ struct fractal *fractal_new(int width, int height, double a, double b)
 
 void fractal_free(struct fractal *f)
 {
+
     if (f)
     {
-      free(f); //Peut être changer le free si il y a une couille dans notre libèrations
-      //de mêmoire https://openclassrooms.com/courses/tableaux-pointeurs-et-allocation-dynamique
+      for (int i = 0; i < fractal_get_height(f); i++)
+      {
+        free((f->pixel)[i]);
+      }
+      free(f->pixel);
+      free(f);
     }
 }
 
-int fractal_get_value(const struct fractal *f, int x, int y)
+/*int fractal_get_value(const struct fractal *f, int x, int y)
 {
 
   int width = fractal_get_width(f);
@@ -65,7 +69,7 @@ int fractal_get_value(const struct fractal *f, int x, int y)
   }
   return EXIT_FAILURE;
 }
-
+*/
 void fractal_set_value(struct fractal *f, int x, int y, int val)
 {
     int width = fractal_get_width(f);
@@ -87,6 +91,20 @@ void fractal_set_value(struct fractal *f, int x, int y, int val)
       tab[x][y]=val;
     }
 }
+
+
+int fractal_get_value(const struct fractal *f, int x, int y)
+{
+    return (f->pixel)[x][y];
+}
+
+/*void fractal_set_value(struct fractal *f, int x, int y, int val)
+{
+  printf("test6\n");
+    (f->pixel)[x][y] = val;
+    ptintf("test6bis\n");
+}
+*/
 
 int fractal_get_width(const struct fractal *f)
 {
