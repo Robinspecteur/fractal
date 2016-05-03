@@ -8,9 +8,8 @@ struct fractal *fractal_new(char *name, int width, int height, double a, double 
     if(newFract)
     {
 			int **ptr;
-      char *string = (char*)malloc(sizeof(*name));
-      string = name;
-      newFract->name = string;
+      //char *string = (char*)malloc(sizeof(*name));
+      newFract->name = name;
       newFract->width = width;
       newFract->height = height;
       newFract->a = a;
