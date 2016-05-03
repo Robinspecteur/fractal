@@ -3,7 +3,7 @@
 
 typedef struct fractal fractal;
 struct fractal {
-	char* fract;
+	char* name;
 	int width;
 	int height;
 	double a;
@@ -21,7 +21,7 @@ struct fractal {
  * @b: partie imaginaire des coordonnées de la fractale
  * @return: un pointeur vers une struct fractal, ou NULL si erreur
  */
-struct fractal *fractal_new(int width, int height, double a, double b);
+struct fractal *fractal_new(char* name, int width, int height, double a, double b);
 
 /*
  * fractal_free: libère la mémoire utilisée par une struct fractal
@@ -29,6 +29,13 @@ struct fractal *fractal_new(int width, int height, double a, double b);
  * @f: fractale à libérer
  */
 void fractal_free(struct fractal *f);
+
+/*
+ * get_average: calcule et reourne la valeur moyenne des pixels
+ *
+ * @f: fractale
+ */
+int fractal_get_average(struct fractal *f);
 
 /*
  * fractal_get_value: retourne la valeur correspondant à un pixel de l'image
@@ -81,6 +88,13 @@ double fractal_get_a(const struct fractal *f);
  * @return: partie imaginaire
  */
 double fractal_get_b(const struct fractal *f);
+
+/*
+ * fractal_get_name: retourne le nom du fractal
+ *
+ * @f: fractale
+ */
+char* fractal_get_name(const struct fractal *f);
 
 /*
  * fractal_compute_value

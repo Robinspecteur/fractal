@@ -2,12 +2,15 @@
 #include <stdio.h>
 #include "fractal.h"
 
-struct fractal *fractal_new(int width, int height, double a, double b)
+struct fractal *fractal_new(char *name, int width, int height, double a, double b)
 {
     fractal *newFract = (fractal*)malloc(sizeof(fractal));
     if(newFract)
     {
 			int **ptr;
+      char *string = (char*)malloc(sizeof(*name));
+      string = name;
+      newFract->name = string;
       newFract->width = width;
       newFract->height = height;
       newFract->a = a;
@@ -20,10 +23,10 @@ struct fractal *fractal_new(int width, int height, double a, double b)
       }
       return newFract;
     }
-     else
-     {
+    else
+    {
        return NULL;
-     }
+    }
 }
 
 void fractal_free(struct fractal *f)
@@ -40,19 +43,37 @@ void fractal_free(struct fractal *f)
     }
 }
 
-/*int fractal_get_value(const struct fractal *f, int x, int y)
+int fractal_get_average(struct fractal *f)
+{
+  int i;
+  int j;
+  int width = fractal_get_width(f);
+  int height = fractal_get_height(f);
+  int sum = 0;
+  for (i=0; i< width; i++)
+  {
+    for (j=0; j < height; j++)
+    {
+    sum = sum + fractal_get_value(f,i,j);
+    }
+  }
+  double average = (double) (sum/(width*height));
+  return average;
+}
+
+int fractal_get_value(const struct fractal *f, int x, int y)
 {
 
   int width = fractal_get_width(f);
   int height = fractal_get_height(f);
-  if (x > width)
+  if (x > width || x < 0)
   {
-    printf("%s\n","x too big");
+    printf("%s\n","x out of bound");
   }
 
-  else if (y > height)
+  else if (y > height || x < 0)
   {
-    printf("%s\n","y too big");
+    printf("%s\n","y out of bound");
   }
 
   else
@@ -69,21 +90,22 @@ void fractal_free(struct fractal *f)
   }
   return EXIT_FAILURE;
 }
-*/
+
 void fractal_set_value(struct fractal *f, int x, int y, int val)
 {
     int width = fractal_get_width(f);
     int height = fractal_get_height(f);
 
-    if (x > width)
+    if (x > width || x < 0)
     {
-      printf("%s\n","x too big");
+      printf("%s\n","x out of bound");
     }
 
-    else if (y > height)
+    else if (y > height || x < 0)
     {
-      printf("%s\n","y too big");
+      printf("%s\n","y out of bound");
     }
+
 
     else
     {
@@ -92,24 +114,15 @@ void fractal_set_value(struct fractal *f, int x, int y, int val)
     }
 }
 
-
-int fractal_get_value(const struct fractal *f, int x, int y)
+char *fractal_get_name(const struct fractal *f)
 {
-    return (f->pixel)[x][y];
+  return f->name;
 }
-
-/*void fractal_set_value(struct fractal *f, int x, int y, int val)
-{
-  printf("test6\n");
-    (f->pixel)[x][y] = val;
-    ptintf("test6bis\n");
-}
-*/
 
 int fractal_get_width(const struct fractal *f)
 {
-    int x = f->width;
-    return x;
+
+    return f->width;
 }
 
 int fractal_get_height(const struct fractal *f)
