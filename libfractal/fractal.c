@@ -72,7 +72,7 @@ double fractal_get_average(struct fractal *f)
   {
     for (j=0; j < height; j++)
     {
-    sum = sum + fractal_get_value(f,i,j);
+    sum = sum + fractal_compute_value(f,i,j);
     }
   }
   double average = (double) (sum/(width*height));
