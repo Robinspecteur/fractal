@@ -7,9 +7,6 @@ struct fractal *fractal_new(char *name, int width, int height, double a, double 
     fractal *newFract = (fractal*)malloc(sizeof(*newFract));
     if(newFract)
     {
-      //char *string = (char*)malloc(sizeof(*name));printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
-      //printf("name :'%s'\n", name);
-      //printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
       newFract->name = name;
       newFract->width = width;
       newFract->height = height;
