@@ -35,7 +35,7 @@ void fractal_free(struct fractal *f);
  *
  * @f: fractale
  */
-int fractal_get_average(struct fractal *f);
+double fractal_get_average(struct fractal *f);
 
 /*
  * fractal_get_value: retourne la valeur correspondant à un pixel de l'image

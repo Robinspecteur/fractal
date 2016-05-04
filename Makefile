@@ -10,7 +10,7 @@ $(EXEC) : main.o libfractal/libfractal.a
 	gcc -o main main.o libfractal/libfractal.a -lpthread -lSDL
 
 main.o : main.c
-	gcc -c main.c
+	gcc -c -g main.c
 
 clean :
 	rm -rf *.o

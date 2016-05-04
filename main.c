@@ -6,33 +6,37 @@
 
 //transforme un string "fract1 800 800 -0.8 0.4" en une fractale avec les
 //caractéristiques correspondantes
-fractal* write_fract(char* str) {
+struct fractal* write_fractal(char* str) {
   const char s[2] = " "; //délimiteur
   char* str2= (char *)malloc(sizeof(*str2));
   strcpy(str2, str);
   char* name = strtok(str2, s);
-  //printf("%s\n", name);
   int width = atoi(strtok(NULL, s));
   int height = atoi(strtok(NULL, s));
   double a = atof(strtok(NULL, s));
   double b = atof(strtok(NULL, s));
-  free(str2);
-  struct fractal *f  = (struct fractal *)fractal_new(name,width,height,a,b);
+  printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
+  //free(str2);
+  //printf("free str2\n");
+  struct fractal *f = fractal_new(name,width,height,a,b);
   return f;
 }
 
+/*
 //transforme un fichier de caract de fractales en tableau de fractal
 struct fractal** file_to_fract(FILE *input) {
   char buf[256];
-  printf("Test 1\n");
+  //printf("Test 1\n");
   fractal** fract_array = (fractal**) malloc(sizeof(**fract_array));
-  printf("Test 2\n");
+  //printf("Test 2\n");
   fgets(buf, sizeof(buf), input);
   printf("buf : %s", buf);
-  //for (size_t i = 0; fgets(buf, sizeof(buf), input); i++) {
-    fract_array[0]=write_fract(buf);
-    printf("Test 3\n");
-  //}
+
+  for (int i = 0; fgets(buf, sizeof(buf), input); i++) {
+    printf("Ligne n°%d\n",i);
+    fract_array[i]=write_fractal(buf);
+    printf("Test\n");
+  }
 
   if (ferror(input)) {
     fprintf(stderr,"Oops, error reading stdin\n");
@@ -40,6 +44,7 @@ struct fractal** file_to_fract(FILE *input) {
   }
   return fract_array;
 }
+*/
 
 //print les caractéristiques d'une fractale
 void read_fract(struct fractal* f) {
@@ -74,14 +79,50 @@ void compute(struct fractal *f)
 
 int main(int argv, char *argc[])
 {
+  struct fractal* fract = write_fractal("fractal1 800 800 0 0");
+  printf("Adresse 1:\t%p\n", &fract);
+  free(fract);
+  fract = write_fractal("fractal2 800 800 -0.5 -0.5");
+  printf("Adresse 2:\t%p\n", &fract);
+
+  /*
   FILE *input = fopen(argc[1], "r");
-  struct fractal *fract_test = file_to_fract(input)[0];
-  read_fract(fract_test);
+  char buf[1000000];
+  //fgets(buf, sizeof(buf), input);
+  //printf("Test\n");
+  struct fractal* best_fract; //la fractale avec la plus grande valeur moyenne
+  int i = 0;
+  double best_average = 0;
+  //printf("Test\n");
+  while (fgets(buf, sizeof(buf), input))
+ {
+    struct fractal* current_fract; //la fractale qu'on calcule
+    printf("Ligne n°%d :\t%s", i, buf);
+    current_fract = write_fractal(buf);
+    printf("Average n°%d :\t%f\n", i, fractal_get_average(current_fract));
+
+    if(fractal_get_average(current_fract)>best_average)
+    {
+      best_fract = current_fract;
+      printf("Testt\n");
+      best_average = fractal_get_average(best_fract);
+    }
+
+    fractal_free(current_fract);
+    i++;
+  }
+  read_fract(best_fract);
+  */
+
+
+
+
+  //free(fract_test);
   /*
 
   struct fract** fract_table = file_to_fract(input);
   char* str = "fract1 800 400 -0.8 0.5";
-  struct fractal* fract_test = write_fract(str);
+  struct fractal* fract_test = write_fractal(str);
   read_fract(fract_test);
   printf("%s", fract_test->name);
   struct fractal* fract_test = (struct fractal *)fractal_new("au top",800,800,-0.6,0.6);
