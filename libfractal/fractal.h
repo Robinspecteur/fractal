@@ -48,6 +48,13 @@ double fractal_get_average(struct fractal *f);
 int fractal_get_value(const struct fractal *f, int x, int y);
 
 /*
+ * fractal_compute: calcule les pixels du fractal
+ *
+ * @f: fractale
+ */
+void fractal_compute(struct fractal *f);
+
+/*
  * fractal_set_value: défini la valeur correspondant à un pixel de l'image
  *
  * @f: fractale

@@ -7,6 +7,10 @@ struct fractal *fractal_new(char *name, int width, int height, double a, double 
     fractal *newFract = (fractal*)malloc(sizeof(*newFract));
     if(newFract)
     {
+<<<<<<< HEAD
+=======
+      //char *string = (char*)malloc(sizeof(*name));printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
+>>>>>>> 1983960163b88672aca64e29ffe9677b521e0da4
       newFract->name = name;
       newFract->width = width;
       newFract->height = height;
@@ -27,6 +31,23 @@ struct fractal *fractal_new(char *name, int width, int height, double a, double 
     }
 }
 
+void fractal_compute(struct fractal *f)
+{
+  int i = 0;
+  int j = 0;
+  int width = fractal_get_width(f);
+  int height = fractal_get_height(f);
+
+  for (i=0; i< width; i++)
+  {
+    for (j=0; j < height; j++)
+    {
+    fractal_compute_value(f,i,j);
+    }
+  }
+  printf("average: %f",fractal_get_average(f));
+}
+
 void fractal_free(struct fractal *f)
 {
   if (f)
@@ -42,6 +63,7 @@ void fractal_free(struct fractal *f)
 
 double fractal_get_average(struct fractal *f)
 {
+  fractal_compute(f);
   int i;
   int j;
   int width = fractal_get_width(f);
