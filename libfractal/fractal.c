@@ -4,29 +4,24 @@
 
 struct fractal *fractal_new(char *name, int width, int height, double a, double b)
 {
-    //printf("Test 1\n");
     fractal *newFract = (fractal*)malloc(sizeof(*newFract));
-    //printf("Test 1\n");
     if(newFract)
     {
       //char *string = (char*)malloc(sizeof(*name));printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
-      printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
-      printf("name :'%s'\n", name);
+      //printf("name :'%s'\n", name);
+      //printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
       newFract->name = name;
       newFract->width = width;
       newFract->height = height;
       newFract->a = a;
       newFract->b = b;
       newFract->pixel = (int**)malloc(width * sizeof(*(newFract->pixel)));
-      printf("sizeof(*(newFract->pixel)) : %zu\n", sizeof(*(newFract->pixel)));
-      printf("sizeof(**(newFract->pixel)) : %zu\n",sizeof(**(newFract->pixel)));
       int i;
       for(i=0; i < width ; i++)
       {
         //printf("Boucle %d\n",i);
         (newFract->pixel)[i]= (int*)malloc(height * sizeof(**(newFract->pixel)));
       }
-      printf("Test 3\n");
       return newFract;
     }
     else
@@ -59,7 +54,7 @@ double fractal_get_average(struct fractal *f)
   {
     for (j=0; j < height; j++)
     {
-    sum = sum + fractal_get_value(f,i,j);
+    sum = sum + fractal_compute_value(f,i,j);
     }
   }
   double average = (double) (sum/(width*height));
