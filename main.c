@@ -8,17 +8,22 @@
 //caractéristiques correspondantes
 struct fractal* write_fractal(char* str) {
   const char s[2] = " "; //délimiteur
-  char* str2= (char *)malloc(sizeof(*str2));
+  char* str2= (char *)malloc(256);
+  //printf("sizeof str2 :%zu", sizeof(*str2));
   strcpy(str2, str);
   char* name = strtok(str2, s);
+  printf("name dans write_fractal : '%s'\n", name);
   int width = atoi(strtok(NULL, s));
   int height = atoi(strtok(NULL, s));
   double a = atof(strtok(NULL, s));
   double b = atof(strtok(NULL, s));
-  printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
-  //free(str2);
-  //printf("free str2\n");
-  struct fractal *f = fractal_new(name,width,height,a,b);
+  free(str2);
+  struct fractal *f = fractal_new(name, width, height, a, b);
+  return f;
+}
+
+struct fractal* create_fractal2(){
+  struct fractal *f = fractal_new("fractal2",800,800,-0.5,-0.5);
   return f;
 }
 
@@ -32,7 +37,7 @@ struct fractal** file_to_fract(FILE *input) {
   fgets(buf, sizeof(buf), input);
   printf("buf : %s", buf);
 
-  for (int i = 0; fgets(buf, sizeof(buf), input); i++) {
+  for (int i = 0; fgets(buf, sizeof(buf), input); i++) {mais
     printf("Ligne n°%d\n",i);
     fract_array[i]=write_fractal(buf);
     printf("Test\n");
@@ -79,10 +84,11 @@ void compute(struct fractal *f)
 
 int main(int argv, char *argc[])
 {
-  struct fractal* fract = write_fractal("fractal1 800 800 0 0");
+  struct fractal* fract = fractal_new("fractal1", 800, 800, 0, 0);
   printf("Adresse 1:\t%p\n", &fract);
   free(fract);
-  fract = write_fractal("fractal2 800 800 -0.5 -0.5");
+  //fract=create_fractal2();
+  fract = write_fractal("fractal 2 800 800 -0.5 -0.5");
   printf("Adresse 2:\t%p\n", &fract);
 
   /*

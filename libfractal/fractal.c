@@ -4,12 +4,14 @@
 
 struct fractal *fractal_new(char *name, int width, int height, double a, double b)
 {
-    printf("Test 1\n");
+    //printf("Test 1\n");
     fractal *newFract = (fractal*)malloc(sizeof(*newFract));
-    printf("Test 1\n");
+    //printf("Test 1\n");
     if(newFract)
     {
-      //char *string = (char*)malloc(sizeof(*name));
+      //char *string = (char*)malloc(sizeof(*name));printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
+      printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
+      printf("name :'%s'\n", name);
       newFract->name = name;
       newFract->width = width;
       newFract->height = height;
@@ -17,14 +19,14 @@ struct fractal *fractal_new(char *name, int width, int height, double a, double 
       newFract->b = b;
       newFract->pixel = (int**)malloc(width * sizeof(*(newFract->pixel)));
       printf("sizeof(*(newFract->pixel)) : %zu\n", sizeof(*(newFract->pixel)));
-      printf("sizeof(**(newFract->pixel)) : %zu\n",sizeof((newFract->pixel)));
+      printf("sizeof(**(newFract->pixel)) : %zu\n",sizeof(**(newFract->pixel)));
       int i;
       for(i=0; i < width ; i++)
       {
         //printf("Boucle %d\n",i);
-        (newFract->pixel)[i]= (int*)malloc(height * sizeof((newFract->pixel)));
+        (newFract->pixel)[i]= (int*)malloc(height * sizeof(**(newFract->pixel)));
       }
-      //printf("Test 3\n");
+      printf("Test 3\n");
       return newFract;
     }
     else
