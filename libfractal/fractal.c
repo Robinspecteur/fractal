@@ -4,12 +4,13 @@
 
 struct fractal *fractal_new(char *name, int width, int height, double a, double b)
 {
-    //printf("Test 1\n");
     fractal *newFract = (fractal*)malloc(sizeof(*newFract));
-    //printf("Test 1\n");
     if(newFract)
     {
+<<<<<<< HEAD
+=======
       //char *string = (char*)malloc(sizeof(*name));printf("width :\t'%d' height :\t'%d'\na :\t'%f' b :\t'%f'\n", width, height, a, b);
+>>>>>>> 1983960163b88672aca64e29ffe9677b521e0da4
       newFract->name = name;
       newFract->width = width;
       newFract->height = height;
