@@ -70,8 +70,9 @@ void read_fractal(struct fractal* f)
 //Produceur prend les fractal dans les files et les mets dans le buffer
 void insert_item(struct fractal *fract_to_insert)
 {
-  int i;
-  for(i=0; i < 2*maxthreads; i ++)//faux !!!!!!
+  int i = 0;
+
+  for(i=0; i < 2*maxthreads ; i ++)//faux !!!!!!
   {
     printf("test enter insert\n");
     if(fract_buffer[i]==NULL)
@@ -79,6 +80,7 @@ void insert_item(struct fractal *fract_to_insert)
       fract_buffer[i] = fract_to_insert;
       read_fractal(fract_buffer[i]);
       fract_inserted ++;
+      break;
     }
   }
 }
