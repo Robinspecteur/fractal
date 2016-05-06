@@ -16,6 +16,8 @@ int position_cons;                    // place du cons dans le buffer
 int producteur_end;
 int consommateur_end;
 int boucle;
+int prod_actif;                       // nombre de producteurs actifs
+int nb_buffer;                        // nombre d'éléments à traiter dans le buffer
 
 pthread_mutex_t mutex;
 sem_t empty;
@@ -99,7 +101,10 @@ void * producteur(void* file)
      pthread_mutex_lock(&mutex);
 
      position_prod = position_prod % (2*maxthreads);
-     fract_buffer[position_prod] = fract_to_send;
+     if(fract_buffer[position_prod]==NULL){
+       fract_buffer[position_prod] = fract_to_send;
+       nb_buffer++;
+     }
      position_prod++;
 
      pthread_mutex_unlock(&mutex);
@@ -125,25 +130,24 @@ void * consommateur()
   double current_average;
   //printf("position_cons : %d\n", position_cons);
   //read_fractal(fract_buffer[position_cons]);
-  while(boucle ==0)
+  printf("nb_buffer : %d\tprod_actif : %d", nb_buffer, prod_actif);
+  while(nb_buffer>0 || prod_actif>0)
   {
     struct fractal *fract_to_read;
-
+    printf("consommateur\n");
     sem_wait(&full);
     pthread_mutex_lock(&mutex);
-
+    printf("consommateur mutex\n");
     position_cons = position_cons % (2*maxthreads);
-    printf("\nfract_buffer[%d] :\n", position_cons);
-    read_fractal(fract_buffer[position_cons]);
-    if(fractal_get_a(fract_buffer[position_cons])==100)
+    if(fract_buffer[position_cons]!=NULL)
     {
-      break;
-      printf("break");
+      printf("\nfract_buffer[%d] :\n", position_cons);
+      read_fractal(fract_buffer[position_cons]);
+      fract_to_read = fract_buffer[position_cons];
+      fract_buffer[position_cons] = NULL;
+      nb_buffer--;
     }
-    fract_to_read = fract_buffer[position_cons];
-    fract_buffer[position_cons]=NULL;
-    printf("buffer après =NULL\n");
-    read_fractal(fract_buffer[position_cons]);
+
     position_cons++;
 
     pthread_mutex_unlock(&mutex);
@@ -192,6 +196,8 @@ int main(int argv, char *argc[])
   int position_prod = 0;
   consommateur_end = 0;
   producteur_end = 0;
+  prod_actif = 0;                       // nombre de producteurs actifs
+  nb_buffer = 0;
 
 /*  for(i = 0; i < argv ; i++)
   {
@@ -223,6 +229,7 @@ int main(int argv, char *argc[])
   for(i =1; i<argv; i ++)
   {
     printf("Création producteur %x\n", i);
+    prod_actif++;
     err = pthread_create(&(thread_producteur[i]), NULL, &producteur, (void*)argc[i]);
     if(err != 0)
       printf("Erreur pthread_create producteur");
@@ -251,24 +258,17 @@ int main(int argv, char *argc[])
       producteur_end --;
       for (i = 1; i< argv; i++)
       {
-        printf("test 3\n");
+        printf("fin thread producteur\n");
         err = pthread_join(thread_producteur[i], NULL);
+        prod_actif--;
         if(err != 0)
           printf("Erreur pthread_join producteur");
       }
-      struct fractal *fract_odd = fractal_new("fract_odd", 100, 100, 100, 100);
 
       sem_wait(&empty);
       pthread_mutex_lock(&mutex);
 
-      position_prod = position_prod % (2*maxthreads);
-      fract_buffer[position_prod] = fract_odd;
-      printf("\nAll producers are joined.\nfract_odd created at %d\n", position_prod);
-      printf("fract_buffer[%d] :\n", position_prod);
-      read_fractal(fract_buffer[position_prod]);
-      position_prod++;
-
-      read_fractal_buffer(fract_buffer);
+      //read_fractal_buffer(fract_buffer);
       pthread_mutex_unlock(&mutex);
       sem_post(&full);
 
@@ -283,7 +283,7 @@ int main(int argv, char *argc[])
         printf("Erreur mutex_destroy consommateur");
       for (j = 0; j< maxthreads; j++)
       {
-
+        printf("fin thread consommateur\n");
         err = pthread_join(thread_consommateur[j], NULL);
         printf("test 5\n");
         if(err != 0)
