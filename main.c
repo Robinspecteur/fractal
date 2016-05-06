@@ -7,10 +7,8 @@
 #include <semaphore.h>
 
 struct fractal **fract_buffer;        // Le buffer faisant le lien entre producteur et consommateur
-struct fractal *bestfract_buffer;     // Le buffer où est placée la meilleure fractale de chaque consommateur
+struct fractal *bestfract;            // Le buffer où est placée la meilleure fractale de chaque consommateur
 int maxthreads;                       // Nombre maximal de thread
-int fract_inserted;                   // Nombre de fractale insérée dans fract_buffer
-int fract_extracted;                  // Nombre de fractale extraite de fract_buffer
 int position_prod;                    // place du prod dans le buffer
 int position_cons;                    // place du cons dans le buffer
 int producteur_end;
@@ -73,17 +71,6 @@ void read_fractal(struct fractal* f)
 }
 }
 
-void read_fractal_buffer(struct fractal** fract_buffer){
-  printf("==============\n");
-  printf("Fractal buffer\n");
-  printf("==============\n");
-  for(int i=0; i<2*maxthreads; i++){
-    read_fractal(fract_buffer[i]);
-  }
-  printf("\n");
-}
-
-
 
 // Il y aura peut être un problème de mémoire avec le write_fractal, si oui mettre write fractal dans le consommateur
 // et changer toutes les fonctions
@@ -96,7 +83,6 @@ void * producteur(void* file)
    {
      struct fractal* fract_to_send = (struct fractal *) malloc(sizeof(fract_to_send));
      fract_to_send = write_fractal(buf_file);
-
      sem_wait(&empty);
      pthread_mutex_lock(&mutex);
 
@@ -172,11 +158,13 @@ void * consommateur()
   //fractal_free(fract_to_read);
 
   }
-  bestfract_buffer = best_fractal;
+  bestfract = best_fractal;
   pthread_mutex_lock(&consommateur_mutex);
-  consommateur_end ++;
+  consommateur_end++;
   pthread_mutex_unlock(&consommateur_mutex);
+  printf("\nbest fractal :\n");
   read_fractal(best_fractal);
+  printf("consommateur_end : %d\n",consommateur_end);
   return NULL;
 }
 
@@ -184,14 +172,12 @@ int main(int argv, char *argc[])
 {
   boucle = 0;
   int err;
-  fract_inserted = 0;
-  fract_extracted = 0;
   maxthreads = 1;    //à changer par maxthreads d'argument
   int* flagsD = 0;   // 0 si l'option -d est désactivée, 1 si activée
   int i = 0;
   int j;
   int count = 1;
-  int consommateur_end = 0;
+  consommateur_end = 0;
   int position_cons =0;                    // place du cons dans le buffer
   int position_prod = 0;
   consommateur_end = 0;
@@ -213,7 +199,6 @@ int main(int argv, char *argc[])
     }
   }*/
   fract_buffer = (struct fractal**)malloc(2*maxthreads*sizeof(struct fractal*));
-  bestfract_buffer = (struct fractal*)malloc(sizeof(struct fractal));
   pthread_t thread_consommateur[argv - count];
   pthread_t thread_producteur[maxthreads];
   struct fractal *fract_buffer[2*maxthreads];
@@ -244,11 +229,9 @@ int main(int argv, char *argc[])
       printf("Erreur pthread_create consommateur");
   }
 
-
   while(1)
   {
     int end;
-
     // Lorsque tous les threads producteurs ont fini, on les termine
     if(producteur_end == argv - count)
     {
@@ -265,19 +248,12 @@ int main(int argv, char *argc[])
           printf("Erreur pthread_join producteur");
       }
 
-      sem_wait(&empty);
-      pthread_mutex_lock(&mutex);
-
-      //read_fractal_buffer(fract_buffer);
-      pthread_mutex_unlock(&mutex);
-      sem_post(&full);
-
       end++;
     }
-
     // Lorsque tous les threads consommateurs ont fini, on les termine
     if(consommateur_end == maxthreads)
     {
+      printf("Fin consommateur\n");
       err = pthread_mutex_destroy(&consommateur_mutex);
       if(err != 0)
         printf("Erreur mutex_destroy consommateur");
@@ -297,6 +273,8 @@ int main(int argv, char *argc[])
           return(EXIT_SUCCESS);
        }
     }
+    printf("consommateur_end : %d", consommateur_end);
+    sleep(1 );
   }
 
 }
