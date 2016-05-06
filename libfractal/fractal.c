@@ -1,13 +1,16 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "fractal.h"
 
 struct fractal *fractal_new(char *name, int width, int height, double a, double b)
 {
-    fractal *newFract = (fractal*)malloc(sizeof(*newFract));
+    fractal *newFract = (fractal*)malloc(sizeof(struct fractal));
     if(newFract)
     {
-      newFract->name = name;
+      char* fract_name= (char *)malloc((strlen(name)+1)*sizeof(char));
+      strcpy(fract_name, name);
+      newFract->name = fract_name;
       newFract->width = width;
       newFract->height = height;
       newFract->a = a;
@@ -72,7 +75,7 @@ double fractal_get_average(struct fractal *f)
     sum = sum + fractal_compute_value(f,i,j);
     }
   }
-  double average = (double) (sum/(width*height));
+  double average = (double)sum/((double)width*(double)height);
   return average;
 }
 
@@ -147,6 +150,8 @@ int fractal_get_height(const struct fractal *f)
 
 double fractal_get_a(const struct fractal *f)
 {
+    if (f == NULL)
+      return -1;
     return f->a;
 }
 

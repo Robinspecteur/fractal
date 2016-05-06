@@ -7,7 +7,7 @@ lib :
 	cd libfractal && $(MAKE)
 
 $(EXEC) : main.o libfractal/libfractal.a
-	gcc -o main main.o libfractal/libfractal.a -lpthread -lSDL
+	gcc -g -o main main.o libfractal/libfractal.a -lpthread -lSDL
 
 main.o : main.c
 	gcc -c -g main.c
